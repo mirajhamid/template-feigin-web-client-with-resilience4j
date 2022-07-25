@@ -1,5 +1,6 @@
 package com.external.app.controller;
 
+import com.external.app.request.SomeRequest;
 import com.external.app.response.SomeResponse;
 import com.external.app.service.SomeService;
 import org.slf4j.Logger;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +40,18 @@ public class SomeController {
         SomeResponse res = null;
         try {
             res = service.getSomeResponse(number);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PostMapping(value = "/save")
+    public ResponseEntity<SomeResponse> saveMethod(@RequestBody SomeRequest payload) {
+        log.info("saveMethod payload :{} ", payload);
+        SomeResponse res = null;
+        try {
+            res = service.getSomeResponse("SRL");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
